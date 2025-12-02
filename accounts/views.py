@@ -9,6 +9,7 @@ from django.contrib import messages
 
 User = get_user_model()
 
+
 def register(request):
     """User registration: creates a real user in the database."""
     if request.method == "POST":
@@ -16,7 +17,7 @@ def register(request):
         password = request.POST.get("password")
         password2 = request.POST.get("password2")
 
-        # checks if all fields are filled 
+        # checks if all fields are filled
         if not username or not password or not password2:
             messages.error(request, "Please fill in all fields.")
         # check if passwords match
@@ -30,7 +31,9 @@ def register(request):
             user = User.objects.create_user(username=username, password=password)
             user.save()
             # registration successful
-            messages.success(request, f"Account created for {username}! You can now log in.")
+            messages.success(
+                request, f"Account created for {username}! You can now log in."
+            )
             return redirect("login")
 
     return render(request, "accounts/register.html")
@@ -71,6 +74,7 @@ def login_view(request):
 
     return render(request, "accounts/login.html")
 
+
 def logout_view(request):
     """Custom logout view"""
     # Store logout message before clearing session
@@ -80,6 +84,7 @@ def logout_view(request):
     logout(request)
 
     return redirect("login")
+
 
 @login_required
 def account_page(request):
