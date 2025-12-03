@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Inventory Management{% endblock %}
+
+{% block content %}
+<div class="inventory-container">
+    <h2>Inventory Management</h2>
+    <p>Manage stock levels for all candies.</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Candy Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Current Stock</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for candy in candies %}
+            <tr>
+                <td>{{ candy.name }}</td>
+                <td>{{ candy.category }}</td>
+                <td>${{ candy.price }}</td>
+                <td>{{ candy.stock }}</td>
+                <td>
+                    <a href="{% url 'update_stock' candy.id %}" class="btn btn-secondary">Update Stock</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No candies found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

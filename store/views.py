@@ -22,3 +22,35 @@ def candy_detail(request, candy_id):
         "candy": candy,
     }
     return render(request, "store/candy_detail.html", context)
+
+
+from django.contrib.admin.views.decorators import staff_member_required
+from django.shortcuts import redirect
+
+
+@staff_member_required
+def inventory_list(request):
+    """Staff-only view to list all candies and their stock"""
+    candies = Candy.objects.all()
+    context = {
+        "candies": candies,
+    }
+    return render(request, "store/inventory_list.html", context)
+
+
+@staff_member_required
+def update_stock(request, candy_id):
+    """Staff-only view to update stock for a candy"""
+    candy = get_object_or_404(Candy, id=candy_id)
+    
+    if request.method == "POST":
+        new_stock = request.POST.get("stock")
+        if new_stock:
+            candy.stock = int(new_stock)
+            candy.save()
+            return redirect("inventory_list")
+
+    context = {
+        "candy": candy,
+    }
+    return render(request, "store/update_stock.html", context)
