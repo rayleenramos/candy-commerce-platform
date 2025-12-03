@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}My Orders - Keanu's Candy Store{% endblock %}
+
+{% block content %}
+<div style="max-width: 1000px; margin: 0 auto;">
+    <h2>📦 My Orders</h2>
+
+    {% if orders %}
+    <div style="background: white; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); overflow: hidden;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead style="background-color: #f8f9fa; border-bottom: 2px solid #dee2e6;">
+                <tr>
+                    <th style="padding: 1rem; text-align: left;">Order #</th>
+                    <th style="padding: 1rem; text-align: left;">Date</th>
+                    <th style="padding: 1rem; text-align: left;">Status</th>
+                    <th style="padding: 1rem; text-align: right;">Total</th>
+                    <th style="padding: 1rem; text-align: center;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr style="border-bottom: 1px solid #dee2e6;">
+                    <td style="padding: 1rem;">#{{ order.id }}</td>
+                    <td style="padding: 1rem;">{{ order.created_at|date:"M d, Y" }}</td>
+                    <td style="padding: 1rem;">
+                        <span style="padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.9rem;
+                            {% if order.status == 'Delivered' %}background-color: #d4edda; color: #155724;
+                            {% elif order.status == 'Shipped' %}background-color: #cce5ff; color: #004085;
+                            {% else %}background-color: #fff3cd; color: #856404;{% endif %}">
+                            {{ order.status }}
+                        </span>
+                    </td>
+                    <td style="padding: 1rem; text-align: right;">${{ order.total_price }}</td>
+                    <td style="padding: 1rem; text-align: center;">
+                        <a href="{% url 'order_detail' order.id %}" class="btn"
+                            style="padding: 0.25rem 0.75rem; font-size: 0.9rem;">View</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div
+        style="text-align: center; padding: 3rem; background: white; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+        <p style="font-size: 1.2rem; color: #6c757d; margin-bottom: 1.5rem;">You haven't placed any orders yet.</p>
+        <a href="{% url 'home' %}" class="btn">Start Shopping 🍬</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

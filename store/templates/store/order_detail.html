@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Order #{{ order.id }} - Keanu's Candy Store{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h2>🧾 Order #{{ order.id }}</h2>
+        <a href="{% url 'order_list' %}" style="color: #6c757d; text-decoration: none;">&larr; Back to Orders</a>
+    </div>
+
+    <!-- Order Status & Info -->
+    <div
+        style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+            <div>
+                <h4 style="margin-bottom: 0.5rem; color: #6c757d;">Status</h4>
+                <span style="padding: 0.25rem 0.5rem; border-radius: 4px; font-weight: bold;
+                    {% if order.status == 'Delivered' %}background-color: #d4edda; color: #155724;
+                    {% elif order.status == 'Shipped' %}background-color: #cce5ff; color: #004085;
+                    {% else %}background-color: #fff3cd; color: #856404;{% endif %}">
+                    {{ order.status }}
+                </span>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 0.5rem; color: #6c757d;">Date Placed</h4>
+                <p style="font-weight: bold;">{{ order.created_at|date:"F d, Y g:i A" }}</p>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 0.5rem; color: #6c757d;">Tracking Number</h4>
+                <p style="font-weight: bold;">{{ order.tracking_number|default:"Pending" }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Items -->
+    <div style="background: white; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); overflow: hidden;">
+        <h3 style="padding: 1.5rem; margin: 0; background-color: #f8f9fa; border-bottom: 1px solid #dee2e6;">Items</h3>
+        <table style="width: 100%; border-collapse: collapse;">
+            <tbody>
+                {% for item in order.items.all %}
+                <tr style="border-bottom: 1px solid #dee2e6;">
+                    <td style="padding: 1rem;">
+                        <strong>{{ item.candy.name }}</strong>
+                    </td>
+                    <td style="padding: 1rem; text-align: center;">
+                        {{ item.quantity }} x ${{ item.price }}
+                    </td>
+                    <td style="padding: 1rem; text-align: right; font-weight: bold;">
+                        ${% widthratio item.quantity 1 item.price %}
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr style="background-color: #f8f9fa;">
+                    <td colspan="2" style="padding: 1rem; text-align: right; font-weight: bold;">Total:</td>
+                    <td style="padding: 1rem; text-align: right; font-weight: bold; font-size: 1.2rem;">
+                        ${{ order.total_price }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
