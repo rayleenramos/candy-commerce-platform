@@ -9,10 +9,26 @@
     <p><strong>Description:</strong> {{ candy.description }}</p>
     <div class="price" style="font-size: 2rem; margin: 1rem 0;">${{ candy.price|floatformat:2 }}</div>
     <p><strong>Stock Available:</strong> {{ candy.stock }}</p>
-    
+
+    <div style="margin-top: 2rem; padding: 1rem; background: #f9f9f9; border-radius: 8px;">
+        <form action="{% url 'cart:cart_add' candy.id %}" method="post">
+            {% csrf_token %}
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <label for="quantity" style="font-weight: bold;">Quantity:</label>
+                <select name="quantity" id="quantity"
+                    style="padding: 0.5rem; border-radius: 4px; border: 1px solid #ddd;">
+                    {% for i in "123456789"|make_list %}
+                    <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
+                    {% endfor %}
+                    <option value="10">10+</option>
+                </select>
+                <button type="submit" class="btn" style="background-color: #28a745;">Add to Cart 🛒</button>
+            </div>
+        </form>
+    </div>
+
     <div style="margin-top: 2rem;">
         <a href="{% url 'home' %}" class="btn btn-secondary">Back to Store</a>
     </div>
 </div>
 {% endblock %}
-

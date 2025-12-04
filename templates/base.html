@@ -210,6 +210,15 @@
             {% if user.is_authenticated %}
             <a href="{% url 'account' %}">My Account</a>
             {% endif %}
+            <a href="{% url 'cart:cart_detail' %}" style="background-color: rgba(255, 255, 255, 0.2);">
+                🛒 Cart
+                {% if cart|length > 0 %}
+                <span
+                    style="background: white; color: #ff6b9d; padding: 2px 6px; border-radius: 10px; font-size: 0.8rem; font-weight: bold;">
+                    {{ cart|length }}
+                </span>
+                {% endif %}
+            </a>
         </nav>
         <div class="user-info">
             {% if user.is_authenticated %}
