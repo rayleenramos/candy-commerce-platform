@@ -42,7 +42,7 @@ def inventory_list(request):
 def update_stock(request, candy_id):
     """Staff-only view to update stock for a candy"""
     candy = get_object_or_404(Candy, id=candy_id)
-    
+
     if request.method == "POST":
         new_stock = request.POST.get("stock")
         if new_stock:
