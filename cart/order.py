@@ -4,6 +4,7 @@ from typing import List
 
 # Models
 
+
 @dataclass
 class OrderItem:
     product_id: int
@@ -21,7 +22,7 @@ class Order:
     customer_name: str
     items: List[OrderItem]
     order_id: str = field(default_factory=lambda: str(uuid.uuid4()))
-    status: str = "Created"   # initial status
+    status: str = "Created"  # initial status
 
     @property
     def total_amount(self) -> float:
@@ -29,6 +30,7 @@ class Order:
 
 
 # Cart → Order Conversion
+
 
 def create_order_from_cart(cart_items: List[dict], customer_name: str) -> Order:
     """
@@ -53,7 +55,9 @@ def create_order_from_cart(cart_items: List[dict], customer_name: str) -> Order:
     order = Order(customer_name=customer_name, items=order_items)
     return order
 
+
 # Simulated Checkout Flow
+
 
 def review_cart(cart_items: List[dict]) -> None:
     print("=== CART REVIEW ===")
@@ -79,10 +83,7 @@ def display_order_confirmation(order: Order) -> None:
     print(f"Status: {order.status}\n")
 
     for item in order.items:
-        print(
-            f"- {item.product_name} (x{item.quantity}) "
-            f"= ${item.subtotal:.2f}"
-        )
+        print(f"- {item.product_name} (x{item.quantity}) " f"= ${item.subtotal:.2f}")
 
     print(f"\nOrder Total: ${order.total_amount:.2f}")
     print("Thank you for your order!")
@@ -108,13 +109,24 @@ def checkout(cart_items: List[dict], customer_name: str) -> None:
     # 4. Display order confirmation
     display_order_confirmation(order)
 
+
 # Example usage
 
 if __name__ == "__main__":
     # Simulated cart data
     cart = [
-        {"product_id": 1, "product_name": "Apple", "quantity": 3, "price_per_unit": 0.99},
-        {"product_id": 2, "product_name": "Bread", "quantity": 1, "price_per_unit": 2.49},
+        {
+            "product_id": 1,
+            "product_name": "Apple",
+            "quantity": 3,
+            "price_per_unit": 0.99,
+        },
+        {
+            "product_id": 2,
+            "product_name": "Bread",
+            "quantity": 1,
+            "price_per_unit": 2.49,
+        },
     ]
 
     checkout(cart, customer_name="John Doe")
