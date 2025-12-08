@@ -9,6 +9,7 @@ class Order(models.Model):
     STATUS_CHOICES = (
         ("Created", "Created"),
         ("Shipped", "Shipped"),
+        ("Out for Delivery", "Out for Delivery"),
         ("Delivered", "Delivered"),
     )
 
@@ -33,6 +34,30 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Order {self.id} - {self.customer_name}"
+
+    def update_status_based_on_time(self):
+        """
+        Updates the order status based on time elapsed since creation.
+        For demo purposes:
+        0-1 min: Created
+        1-2 min: Shipped
+        2-3 min: Out for Delivery
+        >3 min: Delivered
+        """
+        from django.utils import timezone
+        
+        now = timezone.now()
+        diff = now - self.created_at
+        minutes_passed = diff.total_seconds() / 60
+
+        if minutes_passed >= 3:
+            self.status = "Delivered"
+        elif minutes_passed >= 2:
+            self.status = "Out for Delivery"
+        elif minutes_passed >= 1:
+            self.status = "Shipped"
+        
+        self.save()
 
     def get_total_cost(self):
         # Calculates the total cost of all items in this order
