@@ -1,48 +1,57 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Home - Keanu's Candy Store{% endblock %}
+{% block title %}Home - Keanu's Candy{% endblock %}
 
 {% block content %}
-<h2>Welcome to Keanu's Candy Store!</h2>
-<p>Browse our delicious selection of candies below.</p>
-
 <div
-    style="margin: 2rem 0; padding: 1.5rem; background: white; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-    <h3 style="margin-bottom: 1rem; color: #ff6b9d;">Quick Navigation</h3>
-    <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
-        <a href="{% url 'home' %}" class="btn" style="background-color: #ff6b9d;">🏠 Home</a>
-        {% if user.is_authenticated %}
-        <a href="{% url 'account' %}" class="btn" style="background-color: #28a745;">👤 My Account</a>
-        <a href="{% url 'logout' %}" class="btn" style="background-color: #dc3545;">🚪 Logout</a>
-        {% else %}
-        <a href="{% url 'login' %}" class="btn" style="background-color: #007bff;">🔐 Login</a>
-        <a href="{% url 'register' %}" class="btn" style="background-color: #17a2b8;">📝 Register</a>
-        {% endif %}
-        {% if user.is_staff %}
-        <a href="/admin/" class="btn" style="background-color: #6f42c1;">⚙️ Admin Panel</a>
-        {% endif %}
-    </div>
+    class="bg-gradient-to-r from-primary to-secondary text-white py-24 px-8 text-center rounded-b-[3rem] mb-12 shadow-lg">
+    <h2 class="text-5xl md:text-6xl font-bold mb-6" data-animate>Welcome to Keanu's Candy</h2>
+    <p class="text-xl opacity-90 max-w-2xl mx-auto mb-8" data-animate style="transition-delay: 0.1s;">The sweetest place
+        on the internet. Fresh, delicious, and delivered instantly.</p>
+    <a href="#shop" class="btn bg-white text-primary hover:bg-gray-100 hover:text-red-500" data-animate
+        style="transition-delay: 0.2s;">Shop Now</a>
 </div>
 
-<div class="candy-grid">
-    {% for candy in candies %}
-    <div class="candy-card">
-        <h3>{{ candy.name }}</h3>
-        <p>{{ candy.description }}</p>
-        <div class="price">${{ candy.price|floatformat:2 }}</div>
-        <div class="stock">Stock: {{ candy.stock }}</div>
-        <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-            <a href="{% url 'candy_detail' candy.id %}" class="btn" style="flex: 1; text-align: center;">View
-                Details</a>
-            <form action="{% url 'cart:cart_add' candy.id %}" method="post" style="flex: 1;">
-                {% csrf_token %}
-                <input type="hidden" name="quantity" value="1">
-                <button type="submit" class="btn" style="background-color: #28a745; width: 100%;">Add 🛒</button>
-            </form>
+<div class="max-w-7xl mx-auto px-8" id="shop">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 pb-16">
+        {% for candy in candies %}
+        <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:-translate-y-1 hover:shadow-md transition-all duration-300 flex flex-col"
+            data-animate>
+            <div class="h-64 overflow-hidden bg-gray-100 flex items-center justify-center group">
+                <a href="{% url 'candy_detail' candy.id %}" class="w-full h-full flex items-center justify-center">
+                    {% if candy.image_url %}
+                    {% if candy.image_url|slice:":4" == "http" %}
+                    <img src="{{ candy.image_url }}" alt="{{ candy.name }}"
+                        class="w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-110">
+                    {% else %}
+                    <img src="{% static candy.image_url %}" alt="{{ candy.name }}"
+                        class="w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-110">
+                    {% endif %}
+                    {% else %}
+                    <span class="text-6xl">🍬</span>
+                    {% endif %}
+                </a>
+            </div>
+            <div class="p-6 flex-1 flex flex-col">
+                <h3 class="text-xl font-bold mb-2"><a href="{% url 'candy_detail' candy.id %}"
+                        class="text-dark hover:text-primary transition-colors">{{ candy.name }}</a></h3>
+                <p class="text-gray-500 text-sm mb-4 flex-1">{{ candy.description|truncatewords:10 }}</p>
+                <div class="flex justify-between items-center mt-auto">
+                    <span class="text-xl font-bold text-primary">${{ candy.price|floatformat:2 }}</span>
+                    <form action="{% url 'cart:cart_add' candy.id %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="quantity" value="1">
+                        <button type="submit" class="btn btn-primary px-4 py-2 text-sm">Add +</button>
+                    </form>
+                </div>
+            </div>
         </div>
+        {% empty %}
+        <div class="col-span-full text-center py-16">
+            <p class="text-gray-500 text-lg">No candies available right now. Check back soon!</p>
+        </div>
+        {% endfor %}
     </div>
-    {% empty %}
-    <p>No candies available at the moment.</p>
-    {% endfor %}
 </div>
 {% endblock %}

@@ -54,3 +54,30 @@ def update_stock(request, candy_id):
         "candy": candy,
     }
     return render(request, "store/update_stock.html", context)
+
+
+from .forms import CandyForm
+
+
+@staff_member_required
+def candy_create(request):
+    """Staff-only view to add a new candy"""
+    if request.method == "POST":
+        form = CandyForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("inventory_list")
+    else:
+        form = CandyForm()
+
+    return render(request, "store/candy_create.html", {"form": form})
+
+
+@staff_member_required
+def candy_delete(request, candy_id):
+    """Staff-only view to delete a candy"""
+    candy = get_object_or_404(Candy, id=candy_id)
+    if request.method == "POST":
+        candy.delete()
+        return redirect("inventory_list")
+    return render(request, "store/candy_confirm_delete.html", {"candy": candy})

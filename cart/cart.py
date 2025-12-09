@@ -1,6 +1,7 @@
 from decimal import Decimal
 from django.conf import settings
 from store.models import Candy
+from .forms import CartAddProductForm
 
 
 class Cart:
@@ -57,6 +58,9 @@ class Cart:
         for item in cart.values():
             item["price"] = Decimal(item["price"])
             item["total_price"] = item["price"] * item["quantity"]
+            item["update_quantity_form"] = CartAddProductForm(
+                initial={"quantity": item["quantity"], "override": True}
+            )
             yield item
 
     def __len__(self):
@@ -73,4 +77,5 @@ class Cart:
     def clear(self):
         # remove cart from session
         del self.session[settings.CART_SESSION_ID]
+        self.cart = {}
         self.save()

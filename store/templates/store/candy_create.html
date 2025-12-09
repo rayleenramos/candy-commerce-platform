@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Candy - Keanu's Candy{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-8 py-12">
+    <div class="bg-white rounded-2xl shadow-lg p-8 card-hover">
+        <h1 class="text-3xl font-bold text-dark mb-8 text-center">Add New Candy</h1>
+
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+
+            {% for field in form %}
+            <div>
+                <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                    {{ field.label }}
+                </label>
+                {{ field }}
+                {% if field.errors %}
+                <p class="text-red-500 text-xs mt-1">{{ field.errors.0 }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <div class="flex justify-end gap-4 mt-8">
+                <a href="{% url 'inventory_list' %}" class="btn bg-gray-200 text-dark hover:bg-gray-300">Cancel</a>
+                <button type="submit" class="btn btn-primary">Add Candy</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
