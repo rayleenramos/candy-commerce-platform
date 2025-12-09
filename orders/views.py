@@ -33,6 +33,30 @@ def order_create(request):
             # Clear the cart now that the order is saved
             cart.clear()
 
+            # Digital Delivery Feature
+            if order.email.endswith("@kean.edu"):
+                from django.core.mail import send_mail
+
+                subject = f"Digital Candy Voucher for Order #{order.id}"
+                message = f"""
+                Hi {order.customer_name},
+
+                Thanks for your order at Keanu's Candy Store!
+                
+                Since you used a Kean University email, here is your digital candy voucher:
+                
+                CODE: KEAN-CANDY-{order.id}-2025
+                
+                Enjoy!
+                """
+                send_mail(
+                    subject,
+                    message,
+                    "orders@keanucandystore.com",
+                    [order.email],
+                    fail_silently=False,
+                )
+
             # Redirect to success page
             return render(request, "orders/created.html", {"order": order})
     else:

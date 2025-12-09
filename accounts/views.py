@@ -10,33 +10,27 @@ from django.contrib import messages
 User = get_user_model()
 
 
+from django.contrib.auth.forms import UserCreationForm
+
+
 def register(request):
     """User registration: creates a real user in the database."""
+    print("DEBUG: Register view called")
     if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
-        password2 = request.POST.get("password2")
-
-        # checks if all fields are filled
-        if not username or not password or not password2:
-            messages.error(request, "Please fill in all fields.")
-        # check if passwords match
-        elif password != password2:
-            messages.error(request, "Passwords do not match.")
-        # check if username is already taken
-        elif User.objects.filter(username=username).exists():
-            messages.error(request, "This username is already taken.")
-        else:
-            # create the user in the database
-            user = User.objects.create_user(username=username, password=password)
-            user.save()
-            # registration successful
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            username = form.cleaned_data.get("username")
             messages.success(
                 request, f"Account created for {username}! You can now log in."
             )
             return redirect("login")
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = UserCreationForm()
 
-    return render(request, "accounts/register.html")
+    return render(request, "accounts/register.html", {"form": form})
 
 
 def login_view(request):

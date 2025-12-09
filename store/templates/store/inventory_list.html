@@ -1,39 +1,60 @@
 {% extends 'base.html' %}
 
-{% block title %}Inventory Management{% endblock %}
+{% block title %}Inventory - Keanu's Candy{% endblock %}
 
 {% block content %}
-<div class="inventory-container">
-    <h2>Inventory Management</h2>
-    <p>Manage stock levels for all candies.</p>
+<div class="max-w-6xl mx-auto px-8 py-12">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-4xl font-bold text-dark">Inventory Management</h1>
+        <div class="flex gap-4">
+            <a href="{% url 'candy_create' %}" class="btn btn-primary text-sm py-2 px-4 shadow-sm">
+                + Add Candy
+            </a>
+            <div class="bg-primary text-white px-4 py-2 rounded-full text-sm font-semibold shadow-sm">
+                Staff Access
+            </div>
+        </div>
+    </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Candy Name</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Current Stock</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for candy in candies %}
-            <tr>
-                <td>{{ candy.name }}</td>
-                <td>{{ candy.category }}</td>
-                <td>${{ candy.price }}</td>
-                <td>{{ candy.stock }}</td>
-                <td>
-                    <a href="{% url 'update_stock' candy.id %}" class="btn btn-secondary">Update Stock</a>
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="5">No candies found.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover">
+        <table class="w-full text-left border-collapse">
+            <thead class="bg-gray-50 border-b border-gray-100">
+                <tr>
+                    <th class="p-6 font-semibold text-gray-600">Product Name</th>
+                    <th class="p-6 font-semibold text-gray-600">Current Stock</th>
+                    <th class="p-6 font-semibold text-gray-600">Price</th>
+                    <th class="p-6 font-semibold text-gray-600">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                {% for candy in candies %}
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="p-6 font-medium text-dark">{{ candy.name }}</td>
+                    <td class="p-6">
+                        <span
+                            class="{% if candy.stock < 10 %}text-red-500 font-bold{% else %}text-green-600{% endif %}">
+                            {{ candy.stock }}
+                        </span>
+                    </td>
+                    <td class="p-6 text-gray-600">${{ candy.price }}</td>
+                    <td class="p-6">
+                        <a href="{% url 'update_stock' candy.id %}"
+                            class="btn btn-secondary text-sm py-2 px-4 hover:bg-primary hover:text-white hover:border-primary">
+                            Update Stock
+                        </a>
+                        <a href="{% url 'candy_delete' candy.id %}"
+                            class="btn text-red-500 text-sm py-2 px-4 hover:bg-red-50 hover:text-red-600 ml-2">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="p-6 text-center text-gray-500">No candies found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}
