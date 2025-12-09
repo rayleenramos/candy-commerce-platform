@@ -44,4 +44,20 @@ def order_create(request):
 def order_history(request):
     # Displays a list of past orders for the currently logged-in user.
     orders = Order.objects.filter(user=request.user)
+    
+    # trigger automatic updates for demo purposes
+    for order in orders:
+        order.update_status_based_on_time()
+        
     return render(request, "orders/history.html", {"orders": orders})
+
+
+@login_required
+def order_detail(request, order_id):
+    # Displays the details of a single order
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    
+    # trigger automatic update
+    order.update_status_based_on_time()
+    
+    return render(request, "orders/detail.html", {"order": order})

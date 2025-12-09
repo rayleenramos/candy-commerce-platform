@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Order #{{ order.id }} Details{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 800px; margin: 2rem auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h1>Order #{{ order.id }}</h1>
+        <a href="{% url 'orders:order_history' %}" style="text-decoration: none; color: #6c757d;">&larr; Back to
+            History</a>
+    </div>
+
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 2rem;">
+        <h3>Tracking Status</h3>
+        <p>Current Status: <strong>{{ order.status }}</strong></p>
+
+        <!-- Progress Bar -->
+        <style>
+            .progress-track {
+                display: flex;
+                justify-content: space-between;
+                position: relative;
+                margin-top: 30px;
+                margin-bottom: 20px;
+                font-size: 0.9rem;
+                width: 100%;
+            }
+
+            .progress-track::before {
+                content: '';
+                position: absolute;
+                top: 15px;
+                left: 0;
+                right: 0;
+                height: 4px;
+                background: #e9ecef;
+                z-index: 0;
+            }
+
+            .step {
+                position: relative;
+                z-index: 1;
+                background: #f8f9fa;
+                padding: 0 10px;
+                color: #6c757d;
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .step.active {
+                color: #28a745;
+                font-weight: bold;
+            }
+
+            .step::before {
+                content: '●';
+                display: block;
+                font-size: 2rem;
+                line-height: 1;
+                margin-bottom: 5px;
+                color: #e9ecef;
+                background: #f8f9fa;
+            }
+
+            .step.active::before {
+                color: #28a745;
+            }
+        </style>
+
+        <div class="progress-track">
+            <div class="step active">Ordered</div>
+
+            <div
+                class="step {% if order.status == 'Shipped' or order.status == 'Out for Delivery' or order.status == 'Delivered' %}active{% endif %}">
+                Shipped
+            </div>
+
+            <div
+                class="step {% if order.status == 'Out for Delivery' or order.status == 'Delivered' %}active{% endif %}">
+                Out for Delivery
+            </div>
+
+            <div class="step {% if order.status == 'Delivered' %}active{% endif %}">
+                Delivered
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-bottom: 2rem;">
+        <h3>Shipping Details</h3>
+        <p>
+            <strong>{{ order.customer_name }}</strong><br>
+            {{ order.address }}<br>
+            {{ order.city }}, {{ order.zip_code }}<br>
+            {{ order.email }}
+        </p>
+    </div>
+
+    <div>
+        <h3>Order Items</h3>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+            <thead>
+                <tr style="border-bottom: 2px solid #ddd; text-align: left;">
+                    <th style="padding: 10px;">Product</th>
+                    <th style="padding: 10px;">Price</th>
+                    <th style="padding: 10px;">Quantity</th>
+                    <th style="padding: 10px;">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in order.items.all %}
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 10px;">{{ item.product.name }}</td>
+                    <td style="padding: 10px;">${{ item.price }}</td>
+                    <td style="padding: 10px;">{{ item.quantity }}</td>
+                    <td style="padding: 10px;">${{ item.get_cost }}</td>
+                </tr>
+                {% endfor %}
+                <tr style="border-top: 2px solid #ddd;">
+                    <td colspan="3" style="padding: 10px; text-align: right; font-weight: bold;">Total Cost:</td>
+                    <td style="padding: 10px; font-weight: bold;">${{ order.get_total_cost }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
