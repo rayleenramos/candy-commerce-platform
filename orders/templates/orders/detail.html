@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}Order #{{ order.id }} Details{% endblock %}
+{% block title %}Order #{{ order.order_id }} Details{% endblock %}
 
 {% block content %}
 <div class="container" style="max-width: 800px; margin: 2rem auto;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-        <h1>Order #{{ order.id }}</h1>
+        <h1>Order #{{ order.order_id }}</h1>
         <a href="{% url 'orders:order_history' %}" style="text-decoration: none; color: #6c757d;">&larr; Back to
             History</a>
     </div>

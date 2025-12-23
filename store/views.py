@@ -7,10 +7,27 @@ from .models import Candy
 
 
 def home(request):
-    """Home page showing all candies"""
+    """Home page showing all candies with search and filtering"""
     candies = Candy.objects.all()
+
+    # Search
+    query = request.GET.get("q")
+    if query:
+        from django.db.models import Q
+
+        candies = candies.filter(
+            Q(name__icontains=query) | Q(description__icontains=query)
+        )
+
+    # Category Filter
+    category = request.GET.get("category")
+    if category and category != "All":
+        candies = candies.filter(category__iexact=category)
+
     context = {
         "candies": candies,
+        "query": query,
+        "selected_category": category,
     }
     return render(request, "store/home.html", context)
 

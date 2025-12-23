@@ -5,6 +5,9 @@ from .forms import OrderCreateForm
 from cart.cart import Cart
 
 
+from accounts.models import SavedCard
+
+
 def order_create(request):
     # GET: Displays the checkout form and cart summary.
     # POST: Saves the order to the database and clears the cart.
@@ -12,6 +15,15 @@ def order_create(request):
     if request.method == "POST":
         form = OrderCreateForm(request.POST)
         if form.is_valid():
+            # Save card info if requested and user is logged in
+            if request.user.is_authenticated and form.cleaned_data.get("save_card"):
+                SavedCard.objects.create(
+                    user=request.user,
+                    card_number=form.cleaned_data["card_number"],
+                    expiry_date=form.cleaned_data["card_expiry"],
+                    card_holder_name=form.cleaned_data["name_on_card"],
+                )
+
             # Create order object but don't save to DB yet
             # allows user to modify it before saving
             order = form.save(commit=False)
@@ -29,6 +41,10 @@ def order_create(request):
                     price=item["price"],
                     quantity=item["quantity"],
                 )
+                # Decrease stock
+                product = item["product"]
+                product.stock -= item["quantity"]
+                product.save()
 
             # Clear the cart now that the order is saved
             cart.clear()
@@ -37,7 +53,7 @@ def order_create(request):
             if order.email.endswith("@kean.edu"):
                 from django.core.mail import send_mail
 
-                subject = f"Digital Candy Voucher for Order #{order.id}"
+                subject = f"Digital Candy Voucher for Order #{order.order_id}"
                 message = f"""
                 Hi {order.customer_name},
 
@@ -45,7 +61,7 @@ def order_create(request):
                 
                 Since you used a Kean University email, here is your digital candy voucher:
                 
-                CODE: KEAN-CANDY-{order.id}-2025
+                CODE: KEAN-CANDY-{order.order_id}-2025
                 
                 Enjoy!
                 """
@@ -79,7 +95,7 @@ def order_history(request):
 @login_required
 def order_detail(request, order_id):
     # Displays the details of a single order
-    order = get_object_or_404(Order, id=order_id, user=request.user)
+    order = get_object_or_404(Order, order_id=order_id, user=request.user)
 
     # trigger automatic update
     order.update_status_based_on_time()

@@ -26,16 +26,37 @@ class Order(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="Created")
 
     # Link to the registered user (optional, so guest checkout could work in future)
+    # Link to the registered user (optional, so guest checkout could work in future)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True
+    )
+
+    # Custom Order ID
+    order_id = models.CharField(
+        max_length=5, unique=True, editable=False, blank=True, null=True
     )
 
     class Meta:
         # Show newest orders first
         ordering = ["-created_at"]
 
+    def save(self, *args, **kwargs):
+        if not self.order_id:
+            import random
+            import string
+
+            while True:
+                # Generate random 5-char string (uppercase letters + digits)
+                new_id = "".join(
+                    random.choices(string.ascii_uppercase + string.digits, k=5)
+                )
+                if not Order.objects.filter(order_id=new_id).exists():
+                    self.order_id = new_id
+                    break
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return f"Order {self.id} - {self.customer_name}"
+        return f"Order {self.order_id} - {self.customer_name}"
 
     def update_status_based_on_time(self):
         """

@@ -87,3 +87,62 @@ def account_page(request):
         "user": request.user,
     }
     return render(request, "accounts/account.html", context)
+
+
+from .forms import SavedCardForm
+from .models import SavedCard
+
+
+@login_required
+def add_card(request):
+    if request.method == "POST":
+        form = SavedCardForm(request.POST)
+        if form.is_valid():
+            card = form.save(commit=False)
+            card.user = request.user
+            card.save()
+            messages.success(request, "Card added successfully.")
+            return redirect("account")
+    else:
+        form = SavedCardForm()
+
+    return render(request, "accounts/add_card.html", {"form": form})
+
+
+@login_required
+def remove_card(request, card_id):
+    if request.method == "POST":
+        card = SavedCard.objects.filter(id=card_id, user=request.user).first()
+        if card:
+            card.delete()
+            messages.success(request, "Card removed.")
+        else:
+            messages.error(request, "Card not found.")
+    return redirect("account")
+
+
+from .forms import UserUpdateForm, ProfileUpdateForm
+from .models import Profile
+
+
+@login_required
+def edit_profile(request):
+    # Ensure profile exists (for old users)
+    if not hasattr(request.user, "profile"):
+        Profile.objects.create(user=request.user)
+
+    if request.method == "POST":
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = ProfileUpdateForm(request.POST, instance=request.user.profile)
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            messages.success(request, f"Your account has been updated!")
+            return redirect("account")
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.profile)
+
+    context = {"u_form": u_form, "p_form": p_form}
+
+    return render(request, "accounts/edit_profile.html", context)

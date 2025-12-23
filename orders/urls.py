@@ -9,5 +9,5 @@ urlpatterns = [
     # URL for the user's order history /orders/history/
     path("history/", views.order_history, name="order_history"),
     # URL for individual order detail /orders/order/<id>/
-    path("order/<int:order_id>/", views.order_detail, name="order_detail"),
+    path("order/<str:order_id>/", views.order_detail, name="order_detail"),
 ]

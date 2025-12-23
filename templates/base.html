@@ -18,13 +18,14 @@
     <nav class="bg-white shadow-sm sticky top-0 z-50 px-8 py-4 flex justify-between items-center">
         <a href="{% url 'home' %}"
             class="text-2xl font-bold text-primary flex items-center gap-2 hover:text-secondary transition-colors">
-            <span class="text-3xl">🍬</span> Keanu's Candy
+            Keanu's Candy
         </a>
         <div class="flex gap-8 items-center">
             <a href="{% url 'home' %}" class="font-semibold text-dark hover:text-primary transition-colors">Home</a>
             {% if user.is_staff %}
             <a href="{% url 'inventory_list' %}"
                 class="font-semibold text-dark hover:text-primary transition-colors">Inventory</a>
+            <a href="/admin/" class="font-semibold text-dark hover:text-primary transition-colors">DB Admin</a>
             {% endif %}
             <a href="{% url 'cart:cart_detail' %}"
                 class="flex items-center font-semibold text-dark hover:text-primary transition-colors">
@@ -51,8 +52,9 @@
         {% if messages %}
         <ul class="fixed top-24 right-5 list-none z-[2000]">
             {% for message in messages %}
-            <li class="{{ message.tags }} p-4 bg-white text-dark mb-2 rounded-lg shadow-lg border-l-4 border-primary">{{
-                message }}</li>
+            <li class="{{ message.tags }} p-4 bg-white text-dark mb-2 rounded-lg shadow-lg border-l-4 border-primary">
+                {{ message }}
+            </li>
             {% endfor %}
         </ul>
         {% endif %}

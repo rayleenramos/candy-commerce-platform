@@ -13,72 +13,72 @@ class Command(BaseCommand):
         candies_data = [
             {
                 "name": "Chocolate Bar",
-                "description": "Delicious milk chocolate bar",
+                "description": "Milk Chocolate Bar",
                 "price": 2.99,
                 "stock": 100,
                 "category": "Chocolate",
-                "image_url": "",
+                "image_url": "store/images/chocolate_bar.png",
             },
             {
                 "name": "Gummy Bears",
-                "description": "Colorful fruit-flavored gummy bears",
+                "description": "Fruit-flavored Gummy Bears",
                 "price": 3.49,
                 "stock": 150,
                 "category": "Gummies",
-                "image_url": "",
+                "image_url": "store/images/gummy_bears.png",
             },
             {
                 "name": "Lollipop",
-                "description": "Classic swirl lollipop",
+                "description": "Swirl Lollipop",
                 "price": 1.99,
                 "stock": 200,
                 "category": "Hard Candy",
-                "image_url": "",
+                "image_url": "store/images/lollipop.png",
             },
             {
                 "name": "Jelly Beans",
-                "description": "Assorted flavors jelly beans",
+                "description": "Flavored Jelly Beans",
                 "price": 4.99,
                 "stock": 120,
                 "category": "Gummies",
-                "image_url": "",
+                "image_url": "store/images/jelly_beans_v2.png",
             },
             {
                 "name": "Caramel",
-                "description": "Soft caramel candies",
+                "description": "Caramel Candies",
                 "price": 3.99,
                 "stock": 80,
                 "category": "Caramel",
-                "image_url": "",
+                "image_url": "store/images/caramel.png",
             },
             {
                 "name": "Sour Patch Kids",
-                "description": "Sweet and sour gummy candies",
+                "description": "Sweet and Sour Gummy Candies",
                 "price": 4.49,
                 "stock": 90,
                 "category": "Gummies",
-                "image_url": "",
+                "image_url": "store/images/sour_patch_kids.png",
             },
             {
                 "name": "Peppermint",
-                "description": "Cool peppermint candies",
+                "description": "Peppermint Candies",
                 "price": 2.49,
                 "stock": 180,
                 "category": "Hard Candy",
-                "image_url": "",
+                "image_url": "store/images/peppermint.png",
             },
             {
                 "name": "Dark Chocolate",
-                "description": "Rich dark chocolate bar",
+                "description": "Rich Dark Chocolate",
                 "price": 3.99,
                 "stock": 70,
                 "category": "Chocolate",
-                "image_url": "",
+                "image_url": "store/images/dark_chocolate.png",
             },
         ]
 
         for candy_data in candies_data:
-            candy, created = Candy.objects.get_or_create(
+            candy, created = Candy.objects.update_or_create(
                 name=candy_data["name"], defaults=candy_data
             )
             if created:

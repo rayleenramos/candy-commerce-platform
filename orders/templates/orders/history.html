@@ -51,9 +51,9 @@
             {% for order in orders %}
             <tr style="border-bottom: 1px solid #eee;">
                 <td style="padding: 10px;">
-                    <a href="{% url 'orders:order_detail' order.id %}"
+                    <a href="{% url 'orders:order_detail' order.order_id %}"
                         style="font-weight: bold; color: #007bff; text-decoration: none;">
-                        #{{ order.id }}
+                        #{{ order.order_id }}
                     </a>
                 </td>
                 <td style="padding: 10px;">{{ order.created_at|date:"M d, Y" }}</td>
