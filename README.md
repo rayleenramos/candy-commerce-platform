@@ -1,14 +1,39 @@
 # Candy Store Website
 
-A Django web application for browsing and managing a candy store inventory.
+Full-stack e-commerce web application developed as a software engineering capstone project. Built with Django and MySQL/SQLite using Agile Scrum practices, the platform supports end-to-end shopping workflows including authentication, product management, cart and checkout, order tracking, and administrative controls.
 
 ## Features
 
-- Browse available candies with prices and stock information
-- View detailed information for each candy
-- User authentication (login/logout)
-- User account page
-- Django admin panel for managing candies
+- User authentication (registration, login, logout)
+- Browse products with pricing and stock availability
+- Detailed product pages
+- Shopping cart and checkout workflow
+- Order creation, history, and tracking
+- Admin dashboard for managing products and inventory
+- Role-based access via Django Admin
+
+## Tech Stack
+
+- Backend: Django (Python)
+- Frontend: HTML, CSS, Tailwind
+- Database: SQLite (development)
+- Tools: Git, GitHub, Agile Scrum
+- Formatting: Black
+
+## Contributions
+
+This was a team-based software engineering project.
+My primary responsibilities included:
+- Scrum Master responsibilities and sprint coordination
+- Backend development for orders and cart workflows
+- Database modeling and migrations
+- Frontend template integration
+- Feature testing and debugging
+
+## Database
+
+The application uses SQLite (`db.sqlite3`) for data storage. Candies are managed through the Django admin panel at http://127.0.0.1:8000/admin/
+
 
 ## Setup
 
@@ -17,7 +42,7 @@ A Django web application for browsing and managing a candy store inventory.
 - Python 3.11 or higher
 - pip
 
-### Installation
+### Run Locally
 
 *Note: These instructions are for Linux-based systems (macOS/Linux).*
 
@@ -47,58 +72,22 @@ A Django web application for browsing and managing a candy store inventory.
    python manage.py runserver
    ```
 
-### Code Formatting
-
-Format code with Black before committing:
-```bash
-black .
-```
-
 ## Usage
 
 Once the server is running, access the application at http://127.0.0.1:8000/
 
-**Admin Credentials:**
-- Username: `admin`
-- Password: `cps5301`
-
-The admin user will be automatically created on first login.
-
 ## Project Structure
 
 ```
-CandyStoreWebsite/
-├── accounts/          # User authentication app
-├── store/            # Main store app (candies)
-├── candystore/       # Django project configuration
-├── templates/        # Shared templates
-└── manage.py         # Django management script
+candystore/
+├── accounts/      # User authentication
+├── orders/        # Cart and order workflows
+├── store/         # Product management
+├── templates/     # Shared templates
+├── candystore/   # Django configuration
+└── manage.py
 ```
-
-## Database
-
-The application uses SQLite (`db.sqlite3`) for data storage. Candies are managed through the Django admin panel at http://127.0.0.1:8000/admin/
-
-## Django Learning Resources
-
-### Official Documentation
-- [Django Documentation](https://docs.djangoproject.com/) - Official Django documentation
-- [Django Tutorial](https://docs.djangoproject.com/en/stable/intro/tutorial01/) - Official step-by-step tutorial
-- [Django Models](https://docs.djangoproject.com/en/stable/topics/db/models/) - Model documentation
-- [Django Views](https://docs.djangoproject.com/en/stable/topics/http/views/) - Views and URL routing
-
-### Tutorials and Courses
-- [Django for Beginners](https://djangoforbeginners.com/) - Comprehensive beginner's guide
-- [Real Python Django Tutorials](https://realpython.com/tutorials/django/) - Practical Django tutorials
-- [Mozilla Django Tutorial](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django) - MDN web docs tutorial
-
-### Key Concepts
-- **Models**: Define data structure (`models.py`)
-- **Views**: Handle HTTP requests and business logic (`views.py`)
-- **Templates**: HTML presentation layer (`templates/`)
-- **URLs**: Map URLs to views (`urls.py`)
-- **Apps**: Self-contained modules grouping related functionality
 
 ## Copyright
 
-This project was created for Kean University CPS 5301 Advanced Software Engineering class project. All rights reserved.
+This project was created for Kean University CPS 5301 Advanced Software Engineering class project. 
