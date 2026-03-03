@@ -1,6 +1,6 @@
 # Candy Store Website
 
-Full-stack e-commerce web application developed as a software engineering capstone project. Built with Django and MySQL/SQLite using Agile Scrum practices, the platform supports end-to-end shopping workflows including authentication, product management, cart and checkout, order tracking, and administrative controls.
+Full-stack e-commerce platform built to implement end-to-end transactional workflows using Agile Scrum methodology. Built with Django and MySQL/SQLite using Agile Scrum practices, the platform supports end-to-end shopping workflows including authentication, product management, cart and checkout, order tracking, and administrative controls.
 
 ## Features
 
@@ -87,7 +87,3 @@ candystore/
 ├── candystore/   # Django configuration
 └── manage.py
 ```
-
-## Copyright
-
-This project was created for Kean University CPS 5301 Advanced Software Engineering class project. 
