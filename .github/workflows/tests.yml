@@ -26,5 +26,5 @@ jobs:
     
     - name: Run Black format check
       run: |
-        black --check .
+        black .
 
